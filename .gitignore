@@ -1,0 +1,13 @@
+# Ignore env files
+.env
+*.env
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# Ignore logs or generated files (optional)
+*.log
+*.csv
+
+*.pyc
