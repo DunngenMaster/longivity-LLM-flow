@@ -1,16 +1,19 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import GoalsScreen from "./screens/Goals/GoalsScreen";
 import UserProfileScreen from "./screens/userProfile/UserProfileScreen";
 import ImageUploadScreen from "./screens/ImageUpload/ImageUploadScreen";
-import MedicalHistoryScreen from "./screens/medicalHistory/medicalHistoryScreen";
+import MedicalHistoryScreen from "./screens/MedicalHistory/MedicalHistoryScreen";
+import MentalHealthScreen from "./screens/MentalHealth/MentalHealthScreen";
+
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ImageUpload">
+      <Stack.Navigator initialRouteName="UserProfile">
         <Stack.Screen
           name="UserProfile"
           component={UserProfileScreen}
@@ -24,6 +27,15 @@ export default function App() {
           name="MedicalHistory" 
           component={MedicalHistoryScreen} 
         />
+        <Stack.Screen 
+          name="Goals" 
+          component={GoalsScreen} 
+        />
+        <Stack.Screen 
+          name="MentalHealth" 
+          component={MentalHealthScreen} 
+        />
+   
       </Stack.Navigator>
     </NavigationContainer>
   );
