@@ -11,3 +11,6 @@ __pycache__/
 *.csv
 
 *.pyc
+
+uploads/*
+!uploads/.gitkeep
