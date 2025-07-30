@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import styles from "./ImageUploadScreen.styles";
 
 type Props = {
@@ -37,17 +38,60 @@ const ImageUploadScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const onNext = () => {
-    if (!faceImage || !headImage) {
-      Alert.alert("Images Required", "Please take both selfie and headshot to proceed.");
-      return;
+  const onSubmit = async () => {
+    try {
+      if (!faceImage || !headImage) {
+        Alert.alert("Images Required", "Please capture both images.");
+        return;
+      }
+
+      const payload = { ...route.params };
+
+      const [faceBase64, headBase64] = await Promise.all([
+        FileSystem.readAsStringAsync(faceImage, { encoding: FileSystem.EncodingType.Base64 }),
+        FileSystem.readAsStringAsync(headImage, { encoding: FileSystem.EncodingType.Base64 }),
+      ]);
+
+      payload.faceImage = `data:image/jpeg;base64,${faceBase64}`;
+      payload.headImage = `data:image/jpeg;base64,${headBase64}`;
+
+      const response = await fetch("http://10.0.0.51:5000/api/onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        Alert.alert("✅ Submitted!", "Your profile has been uploaded.");
+        navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+      } else {
+        throw new Error("Backend failed");
+      }
+    } catch (err: any) {
+      Alert.alert("❌ Error", err.message);
     }
-    navigation.navigate("Review", {
-      ...route.params,
-      faceImage,
-      headImage,
-    });
   };
+
+  const renderImageBox = (image: string | null, label: string, emoji: string, onPress: () => void) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        width: 140,
+        height: 140,
+        backgroundColor: "#f0f0f0",
+        borderRadius: 12,
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 15,
+      }}
+    >
+      {image ? (
+        <Image source={{ uri: image }} style={{ width: 140, height: 140, borderRadius: 12 }} />
+      ) : (
+        <Text style={{ fontSize: 32 }}>{emoji}\n{label}</Text>
+      )}
+    </TouchableOpacity>
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,27 +107,16 @@ const ImageUploadScreen: React.FC<Props> = ({ navigation, route }) => {
         It's selfie time! Show us your best look 😄
       </Text>
 
-      {faceImage && <Image source={{ uri: faceImage }} style={styles.preview} />}
-      <TouchableOpacity
-        onPress={() => takePhoto(setFaceImage)}
-        style={{ backgroundColor: "#007AFF", padding: 15, borderRadius: 8, marginBottom: 15 }}
-      >
-        <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Take a Selfie</Text>
-      </TouchableOpacity>
-
-      {headImage && <Image source={{ uri: headImage }} style={styles.preview} />}
-      <TouchableOpacity
-        onPress={() => takePhoto(setHeadImage)}
-        style={{ backgroundColor: "#007AFF", padding: 15, borderRadius: 8 }}
-      >
-        <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Take a Head Picture</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row", justifyContent: "space-around", marginBottom: 20 }}>
+        {renderImageBox(faceImage, "Selfie", "🤳", () => takePhoto(setFaceImage))}
+        {renderImageBox(headImage, "Head", "🧠", () => takePhoto(setHeadImage))}
+      </View>
 
       <TouchableOpacity
-        onPress={onNext}
+        onPress={onSubmit}
         style={{ backgroundColor: "#007AFF", padding: 15, borderRadius: 8, marginTop: 30 }}
       >
-        <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Next</Text>
+        <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
   );

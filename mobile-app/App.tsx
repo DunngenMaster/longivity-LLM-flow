@@ -6,6 +6,7 @@ import UserProfileScreen from "./screens/userProfile/UserProfileScreen";
 import ImageUploadScreen from "./screens/ImageUpload/ImageUploadScreen";
 import MedicalHistoryScreen from "./screens/MedicalHistory/MedicalHistoryScreen";
 import MentalHealthScreen from "./screens/MentalHealth/MentalHealthScreen";
+import HomeScreen from "./screens/Home/HomeScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -13,7 +14,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="UserProfile">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="UserProfile"
           component={UserProfileScreen}
@@ -34,6 +35,10 @@ export default function App() {
         <Stack.Screen 
           name="MentalHealth" 
           component={MentalHealthScreen} 
+        />
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
         />
    
       </Stack.Navigator>
