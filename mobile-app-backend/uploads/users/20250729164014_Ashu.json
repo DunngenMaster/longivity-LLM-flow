@@ -1,0 +1,21 @@
+{
+  "name": "Ashu",
+  "age": "28",
+  "weight": "100",
+  "height": "6'4\"",
+  "gender": "Male",
+  "allergies": "No",
+  "diseaseHistory": "No",
+  "stressLevel": 8,
+  "mood": "\ud83d\ude10",
+  "energy": 4,
+  "sleep": 5,
+  "cravings": true,
+  "cravingDetails": "Spicy food ",
+  "goals": [
+    "Muscle gain",
+    "Longevity / anti-aging"
+  ],
+  "faceImage": "uploads\\images\\20250729164014_Ashu_faceImage.jpg",
+  "headImage": "uploads\\images\\20250729164014_Ashu_headImage.jpg"
+}
