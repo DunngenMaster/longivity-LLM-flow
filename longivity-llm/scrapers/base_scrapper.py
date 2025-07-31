@@ -1,4 +1,3 @@
-# scrapers/base_scraper.py
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
@@ -61,8 +60,8 @@ class WebScraper:
 
 if __name__ == "__main__":
     scraper = WebScraper(
-        source_file="../../data/sources.txt",
-        output_dir="../../data/raw",
+        source_file="../data/sources.txt",
+        output_dir="../data/raw",
         delay=1.0
     )
     scraper.scrape()
