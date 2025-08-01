@@ -46,6 +46,7 @@ def download_pdf(paper):
     pdf_info = paper.get("openAccessPdf")
     if not pdf_info:
         return False
+        
     url = pdf_info.get("url")
     if not url or not url.endswith(".pdf"):
         return False
